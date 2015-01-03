@@ -27,7 +27,7 @@ define([
         };
 
         Module.SingleControlBase = function() {
-            var control = {};
+            var control = AXMUtils.object('@Control');
             control._id = 'CT'+AXMUtils.getUniqueID();
             control._notificationHandlers = [];
 

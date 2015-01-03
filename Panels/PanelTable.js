@@ -29,6 +29,9 @@ define([
 
         Module.create = function(id, tableData, tableInfo) {
             var panel = PanelBase.create(id);
+            AXMUtils.Test.checkIsType(tableData, '@TableData');
+            AXMUtils.Test.checkIsType(tableInfo, '@TableInfo');
+
             panel._tableData = tableData;
             panel._tableInfo = tableInfo;
 
@@ -352,6 +355,7 @@ define([
             };
 
             panel.resize = function(xl, yl) {
+                AXMUtils.Test.checkIsNumber(xl, yl);
 
                 var leftWidth = $('#'+panel._id+'_leftTableScrollContainer').width();
                 $('#'+panel._id+'_rightTableScrollContainer').width((xl-leftWidth)+'px');
@@ -369,6 +373,9 @@ define([
 
 
         Module.createTableViewerFrame = function(id, tableData, tableInfo) {
+            AXMUtils.Test.checkIsString(id);
+            AXMUtils.Test.checkIsType(tableData, '@TableData');
+            AXMUtils.Test.checkIsType(tableInfo, '@TableInfo');
             var thePanel = Module.create(id, tableData, tableInfo);
             var theFrame = Frame.FrameFinalCommands(thePanel);
 

@@ -16,26 +16,31 @@
 
 define([
         "require", "jquery", "_",
-        "AXM/AXMUtils", "AXM/Windows/RootWindow"
+        "AXM/AXMUtils", "AXM/Test", "AXM/Windows/RootWindow"
     ],
     function (
         require, $, _,
-        AXMUtils, RootWindow
+        AXMUtils, Test, RootWindow
     ) {
 
         var Module = {};
 
         var theApp = {};
 
+        // Sets the one and only root frame for the app window
         theApp.setRootFrame = function(iRootFrame) {
+            Test.checkIsType(iRootFrame, "@Frame");
             theApp._rootFrame = iRootFrame;
         }
 
+        // Intialises the app
         theApp.init = function() {
+            Test.checkDefined(theApp._rootFrame, "No root frame defined. Call Application.setRootFrame first.");
             theApp._rootWindow = RootWindow.create(theApp._rootFrame);
             theApp._rootWindow.render();
         }
 
+        // Returns the one and only app instance
         Module.get = function() {
             return theApp;
         }

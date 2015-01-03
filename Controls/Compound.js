@@ -25,7 +25,7 @@ define([
         var Module = {};
 
         Module.CompoundControlBase = function() {
-            var compound = {};
+            var compound = AXMUtils.object('@Control');
             compound._id = 'CT'+AXMUtils.getUniqueID();
             compound._members = [];
 
@@ -91,7 +91,7 @@ define([
         ///////////////////////////////////////////////////////////////////////////////////
 
         Module.WrapperControlBase = function(ctrl) {
-            var wrapper = {};
+            var wrapper = AXMUtils.object('@Control');
             wrapper._id = 'CT'+AXMUtils.getUniqueID();
             wrapper._member = ctrl;
 

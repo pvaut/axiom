@@ -15,44 +15,44 @@
 //ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define([
-        "require", "jquery", "_",
-        "AXM/AXMUtils", "AXM/DOM", "AXM/Panels/PanelBase"],
+        "require", "jquery", "_"],
     function (
-        require, $, _,
-        AXMUtils, DOM, PanelBase) {
+        require, $, _) {
 
         var Module = {};
 
-        Module.create = function(id) {
-            var panel = PanelBase.create(id);
-            panel._rootControl = null;
+        Module.reportBug = function(error) {
+            alert(error);
+            debugger;
+        };
 
-            panel.setRootControl = function(ctrl) {
-                AXMUtils.Test.checkIsType(ctrl, '@Control');
-                panel._rootControl = ctrl;
-            };
+        Module.checkDefined = function(obj, error) {
+            if (!obj)
+                Module.reportBug(error);
+        };
 
-            panel.createHtml = function() {
-                var rootDiv = DOM.Div({});
-                rootDiv.addStyle('width', '100%');
-                rootDiv.addStyle('height', '100%');
-                rootDiv.addStyle('overflow', 'auto');
-                if (panel._rootControl)
-                    rootDiv.addElem(panel._rootControl.createHtml());
-                return rootDiv.toString();
-            };
+        Module.checkIsString = function(obj) {
+            $.each(arguments, function(idx, obj) {
+                if(!(typeof obj == 'string'))
+                    Module.reportBug('Variable is not a string');
+            });
+        };
 
-            panel.attachEventHandlers = function() {
-                if (panel._rootControl)
-                    return panel._rootControl.attachEventHandlers();
-            };
+        Module.checkIsNumber = function() {
+            $.each(arguments, function(idx, obj) {
+                if(!(typeof obj == 'number'))
+                    Module.reportBug('Variable is not a number');
+            });
+        };
 
+        Module.checkIsType = function(obj, typeStr) {
+            Module.checkDefined(obj, 'Undefined object of type ' + typeStr);
+            if (!obj.__typeStrings)
+                Module.reportBug('Variable is not an object. (expected '+typeStr+')');
+            if (obj.__typeStrings.indexOf(typeStr)<0)
+                Module.reportBug('Object is not of type '+typeStr);
+        };
 
-            panel.resize = function(xl, yl) {
-            };
-
-            return panel;
-        } ;
 
         return Module;
     });

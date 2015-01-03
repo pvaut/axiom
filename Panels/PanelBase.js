@@ -24,12 +24,12 @@ define([
         var Module = {};
 
         Module.create = function(typeId) {
-            var panel = {
-                _id: AXMUtils.getUniqueID(),
-                _typeId: typeId
-            };
+            var panel = AXMUtils.object('@Panel');
+            panel._id = AXMUtils.getUniqueID();
+            panel._typeId = typeId;
 
             panel._setFrame = function(iFrame) {
+                AXMUtils.Test.checkIsType(iFrame, '@Frame');
                 panel._frame = iFrame;
             };
 

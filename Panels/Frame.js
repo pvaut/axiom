@@ -34,7 +34,7 @@ define([
 
 
         Module.dimSizeInfo = function() {
-            var sizeInfo = {};
+            var sizeInfo = AXMUtils.object('@FrameDimSizeInfo');
             sizeInfo._min = 120;
             sizeInfo._max = 999999;
             sizeInfo._autoSize = false;
@@ -73,7 +73,7 @@ define([
 
 
         Module.FrameGeneric = function () {
-            var frame = {};
+            var frame = AXMUtils.object("@Frame");
             frame._parentFrame = null;
             frame._id = 'FR'+AXMUtils.getUniqueID();
             frame._sizeFraction = 1;
@@ -90,6 +90,7 @@ define([
             };
 
             frame.setSizeFraction = function(fr) {
+                AXMUtils.Test.checkIsNumber(fr);
                 frame._sizeFraction = fr;
                 return frame;
             };
@@ -99,6 +100,7 @@ define([
             };
 
             frame.setTitle = function(iTitle) {
+                AXMUtils.Test.checkIsString(iTitle);
                 frame._hasTitle = true;
                 frame._title = iTitle;
                 return frame;
@@ -120,7 +122,7 @@ define([
 
             frame.setMinDimSize = function (dim, sze) {
                 Module.checkValidDim(dim);
-                //DQX.checkIsNumber(sze);
+                AXMUtils.Test.checkIsNumber(sze);
                 frame._sizeInfos[dim].setMinSize(sze);
                 return frame;
             };
@@ -134,7 +136,7 @@ define([
 
             frame.setFixedDimSize = function (dim, sz) {
                 Module.checkValidDim(dim);
-                //DQX.checkIsNumber(sz);
+                AXMUtils.Test.checkIsNumber(sz);
                 frame._sizeInfos[dim].setFixedSize(sz);
                 return frame;
             };
@@ -188,6 +190,7 @@ define([
             };
 
             frame.setPosition = function(x0, y0, xl, yl, params) {
+                AXMUtils.Test.checkIsNumber(x0, y0, xl, yl);
                 frame.$ElContainer.css('left', x0 + 'px');
                 frame.$ElContainer.css('top', y0 + 'px');
                 frame.$ElContainer.css('width', xl + 'px');
@@ -215,6 +218,7 @@ define([
             frame._memberFrames = [];
 
             frame.addMember = function(memberFrame) {
+                AXMUtils.Test.checkIsType(memberFrame, '@Frame');
                 frame._memberFrames.push(memberFrame);
                 memberFrame._parentFrame = frame;
                 return memberFrame;
@@ -240,6 +244,7 @@ define([
 
 
             frame.setHalfSplitterSize = function(hSize) {
+                AXMUtils.Test.checkIsNumber(hSize);
                 frame._hSplitterSize = hSize;
                 return frame;
             };
@@ -248,6 +253,7 @@ define([
             frame.isVertSplitter = function() { return frame._dim==Module.dimY; };
 
             frame._getClientAutoSize = function(dim) {
+                Module.checkValidDim(dim);
                 if (dim==frame._dim) {
                     var sze = 0;
                     $.each(frame._memberFrames, function(idx, memberFrame) {
@@ -265,6 +271,7 @@ define([
             };
 
             frame._getClientMinSize = function(dim) {
+                Module.checkValidDim(dim);
                 if (dim==frame._dim) {
                     var sze = 0;
                     $.each(frame._memberFrames, function(idx, memberFrame) {
@@ -290,6 +297,8 @@ define([
             };
 
             frame._isFixedSplitter = function(splitterNr) {
+                if ((splitterNr<1) || (splitterNr>=frame._memberFrames.length))
+                    AXMUtils.reportBug('Invalid separator number');
                 if (frame._memberFrames[splitterNr-1]._sizeInfos[frame._dim]._isFixedSize())
                     return true;
                 if (frame._memberFrames[splitterNr]._sizeInfos[frame._dim]._isFixedSize())
@@ -331,6 +340,7 @@ define([
 
 
             frame.calcSplitterPositions = function(length) {
+                AXMUtils.Test.checkIsNumber(length);
                 if (frame._memberFrames.length == 1) return [];
                 frame._normaliseSizeFractions();
                 var position = 0;
@@ -459,6 +469,7 @@ define([
 
 
             frame.setPositionClient = function(xl, yl, params) {
+                AXMUtils.Test.checkIsNumber(xl, yl);
                 frame._adjustFrameSizeFractions(xl);
                 frame.calcSplitterPositions(xl);
                 $.each(frame._memberFrames, function(idx, memberFrame) {
@@ -489,6 +500,7 @@ define([
             var frame = Module.FrameSplitter(1);
 
             frame.setPositionClient = function(xl, yl, params) {
+                AXMUtils.Test.checkIsNumber(xl, yl);
                 frame._adjustFrameSizeFractions(yl);
                 frame.calcSplitterPositions(yl);
                 $.each(frame._memberFrames, function(idx, memberFrame) {
@@ -516,7 +528,7 @@ define([
 
 
 
-        Module.FrameStacker = function (dim) {
+        Module.FrameStacker = function () {
             var frame = Module.FrameCompound();
             frame._activeMemberNr = 0;
             frame._stackHeaderOffset = 0;
@@ -531,6 +543,7 @@ define([
             };
 
             frame.setPositionClient = function(xl, yl, params) {
+                AXMUtils.Test.checkIsNumber(xl, yl);
                 $.each(frame._memberFrames, function(idx, memberFrame) {
                     memberFrame.setPosition(0, frame._stackHeaderOffset, xl, yl-frame._stackHeaderOffset, params);
                 });
@@ -550,7 +563,7 @@ define([
 
         }
 
-        Module.FrameTabber = function (dim) {
+        Module.FrameTabber = function () {
             var frame = Module.FrameStacker();
             frame._stackHeaderOffset = 34;
 
@@ -607,6 +620,7 @@ define([
 
             var _super_setPositionClient = frame.setPositionClient;
             frame.setPositionClient = function(xl, yl, params) {
+                AXMUtils.Test.checkIsNumber(xl, yl);
                 frame.$ElContainer.find('.AXMFrameTabContainer')
                     .outerWidth(xl)
                     .outerHeight(frame._stackHeaderOffset);

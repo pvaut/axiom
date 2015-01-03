@@ -44,9 +44,8 @@ define([
 
         Module.DummyData = function(rowCount, iranseed) {
             ranseed = iranseed;
-            var tableData = {
-                _cols : []
-            };
+            var tableData = AXMUtils.object('@TableData');
+            tableData._cols = [];
 
             tableData.addTextCol = function(id, len) {
                 tableData._cols.push({ tpe:'text', id:id, len:len});

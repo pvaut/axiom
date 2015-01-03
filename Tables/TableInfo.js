@@ -25,7 +25,8 @@ define([
 
 
         Module.colInfo = function(id) {
-            var coldef = { _id: id};
+            var coldef = AXMUtils.object('@ColInfo');
+            coldef._id = id;
             coldef._name = id;
             coldef._dispSize = 140;
             coldef._onOpen = null;
@@ -77,11 +78,12 @@ define([
         };
 
         Module.tableInfo = function() {
-            var tabledef = {};
+            var tabledef = AXMUtils.object('@TableInfo');
             tabledef._columns = [];
             tabledef._onOpenRow = null;
 
             tabledef.addColumn = function(colId) {
+                AXMUtils.Test.checkIsString(colId);
                 var colInfo = Module.colInfo(colId);
                 tabledef._columns.push(colInfo);
                 return colInfo;

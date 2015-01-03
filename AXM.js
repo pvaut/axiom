@@ -36,6 +36,7 @@ define([
         var Module = {
             Msg: Msg,
             Utils: Utils,
+            Test: Utils.Test,
             Application: Application,
             Tables: {
                 TableData:TableData,

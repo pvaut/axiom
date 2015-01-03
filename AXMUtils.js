@@ -15,11 +15,20 @@
 //ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define([
-        "require", "jquery", "_"],
+        "require", "jquery", "_", "AXM/Test"],
     function (
-        require, $, _) {
+        require, $, _, Test) {
 
-        var Module = {};
+        var Module = {
+            Test: Test
+        };
+
+        Module.object = function(typeStr) {
+            var obj = {
+                __typeStrings: [typeStr]
+            };
+            return obj;
+        }
 
 
         String.prototype.AXMInterpolate = function (args) {
